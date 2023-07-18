@@ -15,11 +15,11 @@ def get_food(request, key):
 
 @api_view(["POST"])         # Because of decorator we don't need to add CSRF token
 def set_food(request):
-    try :
+    try:
         data = request.data
         serializer = ItemSerializer(data=data)
         if serializer.is_valid():
-            instanceSet = Food.objects.filter(item_code=serializer.data['item_code']).values()
+            instanceSet = Food.objects.filter(item_code=serializer.data['item_code']).values()      # values() return a set of dictionaries and all() returns a set of objects
             if len(list(instanceSet))>0:
                 # item already in the database
                 totalQuantity = serializer.data['quantity'] + list(instanceSet)[0]['quantity']
@@ -29,7 +29,7 @@ def set_food(request):
                 # item is new to the database
                 dataDict = dict(serializer.data)    # serializer.data is a read-only dictionary. So 'discount' cannot be popped from it
                 dataDict.pop('discount')
-                Food.objects.create(**dataDict)
+                Food.objects.create(**dataDict)     # new object cannot be created with 'discount' which is not a Field of database (generates an error)
                 return Response(dataDict)
         else:
             raise Exception
