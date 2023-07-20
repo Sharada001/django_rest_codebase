@@ -36,6 +36,18 @@ class ItemMixinView(
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
+    def perform_destroy(self, instance):
+        super().perform_destroy(instance)
+    # all perform_**** methods can be edited within this class to change functionality
+    # of retrieve(), list(), create(), update() and destroy() methods.
+
+    # generic API views have inherited generics.GenericAPIView and relevant mixin
+    # Example - CreateAPIView == generics.GenericAPIView + mixins.CreateModelMixin
+    # perform_create() is a method implemented within mixins.CreateModelMixin
+    # So by editing that method in inherited class (in this case ItemMixinView)
+    # we can change how a POST request is handled within post() function,
+    # by editing perform_create() method.
+
 # !!! As POST methods should not support url with 'pk' value and
 # PUT, PATCH, DELETE should not support url without 'pk' value
 # relevant conditional statements must be added to above methods
