@@ -1,5 +1,5 @@
 """
-ASGI config for User_Authentication_Permissions_Basics project.
+ASGI config for User_Autherization_Permissions project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'User_Authentication_Permissions_Basics.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'User_Autherization_Permissions.settings')
 
 application = get_asgi_application()

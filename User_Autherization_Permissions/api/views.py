@@ -1,8 +1,7 @@
-from rest_framework import generics, permissions, authentication
+from rest_framework import generics, authentication, permissions
 from .serializers import ItemSerializer
 from .models import Food
-from django.contrib.auth.views import LoginView
-from django.urls import reverse_lazy
+
 
 class RetrieveItemView(generics.RetrieveAPIView):
     queryset = Food.objects.all()
@@ -29,8 +28,6 @@ class ListItemsView(generics.ListAPIView):
 class CreateAndListItemsView(generics.ListCreateAPIView):
     queryset = Food.objects.all()
     serializer_class = ItemSerializer
-    authentication_classes = [authentication.SessionAuthentication]
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]    # default users are not allowed to POST, but they can get ListView
 
 
 class UpdateItemView(generics.UpdateAPIView):
@@ -60,11 +57,3 @@ class DeleteItemView(generics.DestroyAPIView):  # !!! view name is DestroyAPIVie
     def perform_destroy(self, instance):    # !!! method name is perform_destroy
         # Relevant object(received from instance argument) yet has not been deleted from database
         super().perform_destroy(instance)
-
-
-class CustomLoginView(LoginView):
-    template_name = 'registration/login.html'  # Replace with the path to your login template
-    redirect_authenticated_user = True
-
-    def get_success_url(self):
-        return reverse_lazy('listview')

@@ -1,5 +1,5 @@
 """
-URL configuration for User_Authentication_Permissions_Basics project.
+URL configuration for User_Autherization_Permissions project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -19,7 +19,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('api.urls')),
-    path('login/', include('api.urls'))
-
+    path('api/', include('api.urls')),
+    path('accounts/', include('accounts.urls'))
 ]
