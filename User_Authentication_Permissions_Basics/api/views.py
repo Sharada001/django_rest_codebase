@@ -1,7 +1,8 @@
 from rest_framework import generics, permissions, authentication
 from .serializers import ItemSerializer
 from .models import Food
-
+from django.contrib.auth.views import LoginView
+from django.urls import reverse_lazy
 
 class RetrieveItemView(generics.RetrieveAPIView):
     queryset = Food.objects.all()
@@ -59,3 +60,11 @@ class DeleteItemView(generics.DestroyAPIView):  # !!! view name is DestroyAPIVie
     def perform_destroy(self, instance):    # !!! method name is perform_destroy
         # Relevant object(received from instance argument) yet has not been deleted from database
         super().perform_destroy(instance)
+
+
+class CustomLoginView(LoginView):
+    template_name = 'registration/login.html'  # Replace with the path to your login template
+    redirect_authenticated_user = True
+
+    def get_success_url(self):
+        return reverse_lazy('listview')
