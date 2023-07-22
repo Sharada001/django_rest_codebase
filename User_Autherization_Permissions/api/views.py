@@ -1,9 +1,13 @@
 from rest_framework import generics, authentication, permissions
 from .serializers import ItemSerializer
+from .permissions import IsStaffEditorPermission, IsStaffEditorGetPermission
 from .models import Food
 
 
 class RetrieveItemView(generics.RetrieveAPIView):
+    authentication_classes = [authentication.SessionAuthentication]
+    permission_classes = [permissions.IsAdminUser ,IsStaffEditorGetPermission]
+    # permissions, that must be checked first must come first in 'permission_classes' list
     queryset = Food.objects.all()
     serializer_class = ItemSerializer
 
@@ -21,11 +25,21 @@ class CreateItemView(generics.CreateAPIView):
 
 
 class ListItemsView(generics.ListAPIView):
+    authentication_classes = [authentication.SessionAuthentication]
+    permission_classes = [IsStaffEditorPermission]
     queryset = Food.objects.all()
     serializer_class = ItemSerializer
 
 
 class CreateAndListItemsView(generics.ListCreateAPIView):
+    authentication_classes = [authentication.SessionAuthentication]
+    permission_classes = [permissions.DjangoModelPermissions]
+    # Problem with 'DjangoModelPermissions' is, even though we have only allowed authorized users to
+    # access this API with 'POST' and 'GET'(ListView) methods, still this API allows ListView
+    # for non-authorized users. (only 'POST' api is blocked)
+    # That's because 'appName.view_modelName' permission is given to both DetailView and ListView,
+    # and in this case, DjangoModelPermissions can't check permission to 'appName.view_modelName' because
+    # this class is not responsible for handling DetailViews.
     queryset = Food.objects.all()
     serializer_class = ItemSerializer
 
